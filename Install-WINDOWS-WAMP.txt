@@ -1,0 +1,52 @@
+Procédure d'installation pour WINDOWS (WAMP):
+----------------------------------------------
+PAYET Fabien
+PIERRE Xavier
+IUT Réunion 2013
+
+1 - Installation du serveur:
+----------------------------
+
+	1.1 Copier le dossier Supervision à la racine de votre serveur WAMP
+		ex : http://localhost/Supervision
+		-> Allez ensuite sur "http://localhost/Supervision" et vous devez
+			avoir une page d'authentification FX Network.
+
+	1.2 Modifier les fichiers suivants :
+		-> mysql.php : pour modifier vos identifiants mysql
+		-> mail.php : pour modifier votre email d'admin.
+
+	1.3 Ajouter la Base de donnée (situé dans ce même dossier):
+		En Interface graphique PHP-MY-ADMIN:
+			- Dans PhpMyAdmin:
+				- Importer > Choisir le fichier "supervision.sql" et éxécuter.
+
+	1.4 Test :
+		-> Allez sur "http://localhost/Supervision" et connectez vous avec "rt" comme nom d'user et "Reun10n" comme mdp.
+		-> Si tout ce passe bien, vous devez avoir une liste de 2 PCs avec plusieurs infos.
+
+2 - Installation des Sondes sur les clients :
+---------------------------------------------
+
+	2.1 Version Light (sans Eclipse, en ligne de commande seule):
+		- Se mettre dans le dossier "Java" de "Supervision" 
+		- Lancer la commande "javac SondeLight.java" puis 
+		- La compilation est faite puis tapez "java SondeLight <@Serveur>"
+			-> ex : java SondeLight 192.168.1.1
+
+	2.2 Version Normale (Eclipse):
+		- Lancer Eclipse
+		- Créer un Nouveau Projet Java
+		- Dans le Navigator (à gauche) cliquer sur le projet créé, puis allez dans "src" et faire clic droit, puis coller le fichier "Sonde.java" donné dans ce dossier (Supervision/Java)
+		- Allez ensuite dans le menu "Project" > "Properties" > "Java Build Path"
+		- Dans ce menu, cliquer sur l'onglet "Libraries" puis "Add External JARs"
+		- Choississez ensuite les deux fichiers "log4.jar" et "sigar.jar" disponible dans le dossier Supervision/Java/lib
+		- Cliquer sur OK
+		- Cliquer sur la fleche verte pour compiler : il y aura une erreur, c'est normal.
+		- Cliquer ensuite sur la petite Flèche sur l'icone "RUN" (petite icone play en vert), pour dérouler et cliquer sur "RUN CONFIGURATIONS"
+		- Dans ce menu, allez dans "Arguments" et ajoutant l'adresse du serveur dans "Program arguments" Puis RUN.
+		- Lancer la compilation et si tout se passe bien vous aurez un message ok.
+
+3 - Test :
+	- Allez sur le site et votre pc a du être ajouté dans le tableau. Sinon, merci d'actualiser la page (car elle s'actualise toutes les 10 secondes)
+
