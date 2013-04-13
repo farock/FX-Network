@@ -9,14 +9,11 @@ import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.Enumeration;
 
-import org.hyperic.sigar.Mem;
-import org.hyperic.sigar.Sigar;
-import org.hyperic.sigar.SigarException;
 
 // Programme SONDE installer sur chaque equipement du reseau
 // Cree par : PAYET Fabien et PIERRE Xavier
 // Anne : 2013
-// Mise a jour : Version 1.3
+// Mise a jour : Version 1.0
 
 // Informations envoyes au serveur :
 //----------------------------------
@@ -29,10 +26,10 @@ import org.hyperic.sigar.SigarException;
 // L'os : "os"
 // Pourcentage d'utilisation DISQUE DUR : "disk"
 
-public class Sonde 
+public class SondeLight 
 {
 
-	public static void main(String[] args) throws UnknownHostException, SigarException 
+	public static void main(String[] args) throws UnknownHostException 
 	{
 		try
 		{
@@ -43,6 +40,7 @@ public class Sonde
 			 int minutes = date_debut.getMinutes();
 			 int secondes = date_debut.getSeconds();
 			 int temps_debut = (heures*3600)+(minutes*60)+(secondes);
+			 			 
 			 
 			 while (!finished) // Timer 
 			 {
@@ -112,10 +110,10 @@ public class Sonde
 				 int disk = Disk(os);
 				 
 				 // Ram:
-				 int ram = Ram();
+				 int ram = 0;
 				 
 				 // Cpu:
-				 int cpu = Cpu();
+				 int cpu = 0;
 				 
 	
 				 // On cree l'URL :
@@ -192,39 +190,6 @@ public class Sonde
 		
 		return disk;
 	}
-	
-	
-	// Pour la RAM:
-	public static int Ram()
-	{
-		int ram ;
-		Sigar sigar = new Sigar();
-        Mem memoire = null;
-        
-        try 
-        {
-            memoire = sigar.getMem();
-        } 
-        catch (SigarException se) 
-        {
-            se.printStackTrace();
-        }
-        ram = (int) (((memoire.getTotal()-memoire.getFree())*100)/memoire.getTotal());
-     
-		return ram;
-	}
-	
-	// Pour le CPU:
-		public static int Cpu() throws SigarException
-		{
-			int cpu ;
-			Sigar sigar = new Sigar();
-			long cpu_libre = sigar.getCpu().getIdle();
-			long cpu_totale =  sigar.getCpu().getTotal();
-			cpu = (int) (((cpu_totale - cpu_libre)*100)/cpu_totale);
-	     
-			return cpu;
-		}
 	
 	
 }
