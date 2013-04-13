@@ -9,11 +9,14 @@ import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.Enumeration;
 
+import org.hyperic.sigar.Mem;
+import org.hyperic.sigar.Sigar;
+import org.hyperic.sigar.SigarException;
 
 // Programme SONDE installer sur chaque equipement du reseau
 // Cree par : PAYET Fabien et PIERRE Xavier
 // Anne : 2013
-// Mise a jour : Version 1.1
+// Mise a jour : Version 1.0
 
 // Informations envoyes au serveur :
 //----------------------------------
@@ -29,7 +32,7 @@ import java.util.Enumeration;
 public class Sonde 
 {
 
-	public static void main(String[] args) throws UnknownHostException
+	public static void main(String[] args) throws UnknownHostException, SigarException 
 	{
 		try
 		{
@@ -108,6 +111,11 @@ public class Sonde
 				 // Disque dur : 
 				 int disk = Disk(os);
 				 
+				 // Ram:
+				 int ram = Ram();
+				 
+				 // Cpu:
+				 int cpu = Cpu();
 				 
 	
 				 // On cree l'URL :
@@ -129,7 +137,7 @@ public class Sonde
 				 
 				 // On echange les donnee avec le serveur :
 				 OutputStreamWriter writer = new OutputStreamWriter(connexion.getOutputStream());
-				 writer.write("nom="+nom_pc+"&addip="+ip_add+"&addmac="+add_mac+"&tps="+temps_enligne+"&date="+date_current+"&tps_current="+temps_current+"&os="+os+"&disk="+disk);
+				 writer.write("nom="+nom_pc+"&addip="+ip_add+"&addmac="+add_mac+"&tps="+temps_enligne+"&date="+date_current+"&tps_current="+temps_current+"&os="+os+"&disk="+disk+"&ram="+ram+"&cpu="+cpu);
 				 writer.flush();
 					 
 				 // On affiche le resultat:
@@ -185,6 +193,38 @@ public class Sonde
 		return disk;
 	}
 	
+	
+	// Pour la RAM:
+	public static int Ram()
+	{
+		int ram ;
+		Sigar sigar = new Sigar();
+        Mem memoire = null;
+        
+        try 
+        {
+            memoire = sigar.getMem();
+        } 
+        catch (SigarException se) 
+        {
+            se.printStackTrace();
+        }
+        ram = (int) (((memoire.getTotal()-memoire.getFree())*100)/memoire.getTotal());
+     
+		return ram;
+	}
+	
+	// Pour le CPU:
+		public static int Cpu() throws SigarException
+		{
+			int cpu ;
+			Sigar sigar = new Sigar();
+			long cpu_libre = sigar.getCpu().getIdle();
+			long cpu_totale =  sigar.getCpu().getTotal();
+			cpu = (int) (((cpu_totale - cpu_libre)*100)/cpu_totale);
+	     
+			return cpu;
+		}
 	
 	
 }

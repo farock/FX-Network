@@ -91,6 +91,8 @@ else
 	$tps_current = $_POST['tps_current'];
 	$os = $_POST['os'];
 	$disk = $_POST['disk'];
+	$ram = $_POST['ram'];
+	$cpu = $_POST['cpu'];	
 
 	// On supprime les doublons :
 	$sql= "SELECT * FROM users;";
@@ -135,6 +137,7 @@ else
 
 	while($data = mysql_fetch_array($req))
 	{
+	 	include("espion.php");
 
 					echo "<tr>";
 					
@@ -188,7 +191,8 @@ else
 	 				
 	 				echo "<td style='width:130px;'>".$data['date']."</td>";
 	 				
-	 				
+	 				// POur les barres de pourcentages en couleurs :
+	 				include("info_barre.php");
 	 					
 	 				echo '</td>';
 	 				echo '<td>';
