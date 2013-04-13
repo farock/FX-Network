@@ -7,11 +7,13 @@ import java.net.NetworkInterface;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.Enumeration;
+
 
 // Programme SONDE installer sur chaque equipement du reseau
 // Cree par : PAYET Fabien et PIERRE Xavier
 // Anne : 2013
-// Mise a jour : Version 1.0
+// Mise a jour : Version 1.1
 
 // Informations envoyes au serveur :
 //----------------------------------
@@ -22,6 +24,7 @@ import java.util.Date;
 // Date du dernier msg envoye : "date_current"
 // Date du dernier msg envoye (en seconde) : "temps_current"
 // L'os : "os"
+// Pourcentage d'utilisation DISQUE DUR : "disk"
 
 public class Sonde 
 {
@@ -101,6 +104,10 @@ public class Sonde
 	
 				
 				 System.out.println("Mon @Mac est: "+add_mac);
+	
+				 // Disque dur : 
+				 int disk = Disk(os);
+				 
 				 
 	
 				 // On cree l'URL :
@@ -122,7 +129,7 @@ public class Sonde
 				 
 				 // On echange les donnee avec le serveur :
 				 OutputStreamWriter writer = new OutputStreamWriter(connexion.getOutputStream());
-				 writer.write("nom="+nom_pc+"&addip="+ip_add+"&addmac="+add_mac+"&tps="+temps_enligne+"&date="+date_current+"&tps_current="+temps_current);
+				 writer.write("nom="+nom_pc+"&addip="+ip_add+"&addmac="+add_mac+"&tps="+temps_enligne+"&date="+date_current+"&tps_current="+temps_current+"&os="+os+"&disk="+disk);
 				 writer.flush();
 					 
 				 // On affiche le resultat:
@@ -148,4 +155,36 @@ public class Sonde
 		
 
 	}
+	
+	// Pour le DISQUE DUR :
+	public static int Disk(String os)
+	{
+		int disk;
+		
+		 // On regarde dabord quel OS :
+		 File file ;
+	     long totalSpace ;   // Capacite de la partition
+	     long freeSpace ;    // Espace disponible
+
+		 if((os.equals("Windows XP")) || (os.equals("Windows 7")) || (os.equals("Windows")))
+		 {
+			file = new File("C:");
+		 }
+		 
+		 else
+		 {
+			 file = new File("/");
+		 }
+		
+	     totalSpace = file.getTotalSpace(); //capacite de la partition
+	     freeSpace = file.getFreeSpace(); //Espace disponible
+	     totalSpace = totalSpace / (1024 * 1024 * 1024); // met en Go
+	     freeSpace = freeSpace / (1024 * 1024 * 1024); // met en Go
+	     disk = (int) (((totalSpace-freeSpace)*100)/totalSpace);
+		
+		return disk;
+	}
+	
+	
+	
 }
